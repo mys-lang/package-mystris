@@ -14,15 +14,25 @@ Project: https://github.com/mys-lang/package-mystris
 
 Rotate with Z and X and move with left and right arrows.
 
-Build and run.
+Installation
+============
 
-.. code-block:: myscon
+#. Install SDL libraries.
 
-   ❯ mys run
-   ...
-    ✔ Getting linker flags for SDL2_ttf (0 seconds)
-    ✔ Building (1.81 seconds)
-   Mystris -- tribute to venerable Twintris
+   .. code-block:: text
+
+      sudo apt install libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
+
+#. Install and run Mystris.
+
+   .. code-block:: myscon
+
+      ❯ mys install mystris
+      ...
+       ✔ Building (1.1 seconds)
+       ✔ Installing mystris in /home/erik/.local/bin (0 seconds)
+      ❯ mystris
+      Mystris -- tribute to venerable Twintris
 
 .. |discord| image:: https://img.shields.io/discord/777073391320170507?label=Discord&logo=discord&logoColor=white
 .. _discord: https://discord.gg/GFDN7JvWKS
