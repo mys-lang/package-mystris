@@ -8,6 +8,8 @@ About
 A tetris clone based on https://github.com/nsauzede/vsdl2 in the `Mys
 programming language`_.
 
+Project: https://github.com/mys-lang/package-mystris
+
 .. image:: images/screenshot.png
 
 Rotate with Z and X and move with left and right arrows.
