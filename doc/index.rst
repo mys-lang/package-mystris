@@ -12,7 +12,24 @@ Project: https://github.com/mys-lang/package-mystris
 
 .. image:: images/screenshot.png
 
-Rotate with Z and X and move with left and right arrows.
+Controls
+========
+
++-----+---------------------------------+
+| Key | Description                     |
++=====+=================================+
+| Z   | Rotate tetro counterclockwise.  |
++-----+---------------------------------+
+| X   | Rotate tetro clockwise.         |
++-----+---------------------------------+
+| ⬅   | Move tetro left.                |
++-----+---------------------------------+
+| ➡   | Move tetro right.               |
++-----+---------------------------------+
+| ⬇   | Move tetro down.                |
++-----+---------------------------------+
+| ⬆   | Move tetro up (yeah, right...). |
++-----+---------------------------------+
 
 Installation
 ============
