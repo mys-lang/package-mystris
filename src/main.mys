@@ -455,7 +455,9 @@ class Game:
                     self.drop_tetro()
                     self.new_tetro()
 
-                    if not self.delete_cleared_lines():
+                    if self.delete_cleared_lines():
+                        self.clear_sound.play(0, 0)
+                    else:
                         self.drop_block_sound.play(0, 0)
 
                 return
@@ -487,9 +489,6 @@ class Game:
         for y in range(2, FIELD_HEIGHT + 3):
             if self.delete_cleared_line(y):
                 number_of_cleared_lines += 1
-
-        if number_of_cleared_lines > 0:
-            self.clear_sound.play(0, 0)
 
         return number_of_cleared_lines > 0
 
