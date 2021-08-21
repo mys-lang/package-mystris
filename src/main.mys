@@ -26,7 +26,7 @@ from sdl import sdl_init
 from sdl import ttf_init
 from sdl import volume_music
 
-TITLE: string = "Mystris"
+TITLE: string = "Mystris -- tribute to venerable Twintris"
 
 BLOCK_SIZE: i64 = 20
 
@@ -248,9 +248,16 @@ class Game:
         self.mys_logo = img_load(MYS_LOGO_PATH)
         self.mys_logo_texture = self.renderer.create_texture_from_surface(self.mys_logo)
         self.key_fire = KeyCode.L
-        self.state = State.Running
+        self.state = State.GameOver
         self.nes_random = NesRandom()
         self.font = Font(FONT_PATH, FONT_SIZE)
+        self.x_offset = FIELD_WIDTH * BLOCK_SIZE + 1
+        self.next_tetro_index = 0
+        self.field = create_empty_field()
+
+    def restart(self):
+        self.tetro_stats = [0, 0, 0, 0, 0, 0, 0]
+        self.state = State.Running
         self.x_offset = FIELD_WIDTH * BLOCK_SIZE + 1
         self.next_tetro_index = self.nes_random.random()
         self.new_tetro()
@@ -270,6 +277,9 @@ class Game:
         frame_counter = 0
 
         while True:
+            if self.state == State.GameOver:
+                self.restart()
+
             frame_counter += 1
 
             if frame_counter % 30 == 0:
@@ -406,10 +416,10 @@ class Game:
             self.move_tetro_down()
 
     def handle_key_space(self):
-        print("handle_key_space")
+        pass
 
     def handle_key_fire(self):
-        print("handle_key_fire")
+        pass
 
     def rotate_tetro(self, step: i64):
         rotation_index = self.rotation_index
@@ -505,7 +515,6 @@ class Game:
         return True
 
 def main():
-    print("Mystris -- tribute to venerable Twintris")
     sdl_init()
     ttf_init()
     img_init()
