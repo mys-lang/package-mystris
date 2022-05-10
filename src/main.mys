@@ -78,7 +78,7 @@ class State:
 class NesRandom:
     _previous_piece: i64
 
-    def random(self) -> i64:
+    func random(self) -> i64:
         piece = randint(0, 6)
 
         if piece == self._previous_piece:
@@ -92,13 +92,13 @@ class FrameTiming:
     ticks_per_frame: u64
     start_tick: u64
 
-    def __init__(self):
+    func __init__(self):
         self.ticks_per_frame = get_performance_frequency() / 30
 
-    def start(self):
+    func start(self):
         self.start_tick = get_performance_counter()
 
-    def sleep_until_next_frame(self):
+    func sleep_until_next_frame(self):
         frame_ticks = get_performance_counter() - self.start_tick
 
         if frame_ticks < self.ticks_per_frame:
@@ -181,14 +181,14 @@ TETROS: [Tetro] = [
           ])
 ]
 
-def create_empty_row() -> [i64]:
+func create_empty_row() -> [i64]:
     row = [0 for _ in range(FIELD_WIDTH + 2)]
     row[0] = -1
     row[-1] = -1
 
     return row
 
-def create_empty_field() -> [[i64]]:
+func create_empty_field() -> [[i64]]:
     field = [create_empty_row() for _ in range(FIELD_HEIGHT + 4)]
 
     for i in range(FIELD_WIDTH + 2):
@@ -229,7 +229,7 @@ class Game:
     drop_block_sound: Wav
     clear_sound: Wav
 
-    def __init__(self, width: i64, height: i64, title: string):
+    func __init__(self, width: i64, height: i64, title: string):
         self.width = width
         self.height = height
         self.tetro_stats = [0, 0, 0, 0, 0, 0, 0]
@@ -255,7 +255,7 @@ class Game:
         self.next_tetro_index = 0
         self.field = create_empty_field()
 
-    def restart(self):
+    func restart(self):
         self.tetro_stats = [0, 0, 0, 0, 0, 0, 0]
         self.state = State.Running
         self.x_offset = FIELD_WIDTH * BLOCK_SIZE + 1
@@ -263,7 +263,7 @@ class Game:
         self.new_tetro()
         self.field = create_empty_field()
 
-    def setup_sound(self):
+    func setup_sound(self):
         open_audio(48000, 2, AUDIO_BUFFER_SIZE)
         volume_music()
         self.music = Music(MUSIC_PATH)
@@ -271,7 +271,7 @@ class Game:
         self.drop_block_sound = Wav(DROP_BLOCK_SOUND_PATH)
         self.clear_sound = Wav(CLEAR_SOUND_PATH)
 
-    def run(self):
+    func run(self):
         frame_timing = FrameTiming()
         frame_timing.start()
         frame_counter = 0
@@ -292,7 +292,7 @@ class Game:
 
             frame_timing.sleep_until_next_frame()
 
-    def draw(self):
+    func draw(self):
         self.renderer.clear()
         self.draw_background()
         self.draw_tetro()
@@ -306,17 +306,17 @@ class Game:
         self.draw_next_tetro_text()
         self.renderer.present()
 
-    def draw_background(self):
+    func draw_background(self):
         self.fill_rect(Rect(0, 0, self.width, self.height), BACKGROUND_COLOR)
 
-    def draw_tetro(self):
+    func draw_tetro(self):
         for block in self.tetro.blocks[self.rotation_index]:
             self.draw_block(self.x_pos + block.x,
                             self.y_pos + block.y,
                             self.tetro.color_index,
                             self.x_offset)
 
-    def draw_field(self):
+    func draw_field(self):
         for y in range(3, FIELD_HEIGHT + 3):
             for x in range(1, FIELD_WIDTH + 1):
                 row = self.field[y]
@@ -324,20 +324,20 @@ class Game:
                 if row[x] > 0:
                     self.draw_block(x, y, row[x] - 1, self.x_offset)
 
-    def draw_block(self, x: i64, y: i64, color_index: i64, x_offset: i64):
+    func draw_block(self, x: i64, y: i64, color_index: i64, x_offset: i64):
         rect = Rect(x_offset + (x - 1) * BLOCK_SIZE,
                     (y - 3) * BLOCK_SIZE,
                     BLOCK_SIZE - 1,
                     BLOCK_SIZE - 1)
         self.fill_rect(rect, TETRO_COLORS[color_index])
 
-    def draw_vertial_splitters(self):
+    func draw_vertial_splitters(self):
         rect = Rect(BLOCK_SIZE * FIELD_WIDTH - 2, 0, 2, self.height)
         self.fill_rect(rect, FOREGROUND_COLOR)
         rect.x = WIN_WIDTH - BLOCK_SIZE * FIELD_WIDTH + 1
         self.fill_rect(rect, FOREGROUND_COLOR)
 
-    def draw_stats_blocks(self):
+    func draw_stats_blocks(self):
         for i, stat in enumerate(self.tetro_stats):
             tetro = TETROS[i]
 
@@ -347,14 +347,14 @@ class Game:
                 rect = Rect(x, y, BLOCK_SIZE - 1, BLOCK_SIZE - 1)
                 self.fill_rect(rect, TETRO_COLORS[tetro.color_index])
 
-    def draw_stats_text(self):
+    func draw_stats_text(self):
         self.draw_text(BLOCK_SIZE, 0, "STATISTICS", TEXT_COLOR)
 
         for i, stat in enumerate(self.tetro_stats):
             y = (i + 1) * (5 * BLOCK_SIZE / 2) - FONT_SIZE / 2
             self.draw_text(BLOCK_SIZE * 7, y, str(self.tetro_stats[i]), TEXT_COLOR)
 
-    def draw_next_tetro(self):
+    func draw_next_tetro(self):
         tetro = TETROS[self.next_tetro_index]
 
         for block in tetro.blocks[0]:
@@ -363,25 +363,25 @@ class Game:
             rect = Rect(x, y, BLOCK_SIZE - 1, BLOCK_SIZE - 1)
             self.fill_rect(rect, TETRO_COLORS[tetro.color_index])
 
-    def draw_next_tetro_text(self):
+    func draw_next_tetro_text(self):
         self.draw_text(BLOCK_SIZE * 23, BLOCK_SIZE * 7, "NEXT", TEXT_COLOR)
 
-    def draw_middle(self):
+    func draw_middle(self):
         self.texture.update(self.screen)
         self.renderer.copy(self.texture, None)
 
-    def draw_logo(self):
+    func draw_logo(self):
         tw, th = self.mys_logo_texture.query()
         self.renderer.copy(self.mys_logo_texture,
                            Rect(5 * (WIN_WIDTH - tw / 2) / 6, 20, tw, th))
 
-    def draw_text(self, x: i64, y: i64, text: string, color: Color):
+    func draw_text(self, x: i64, y: i64, text: string, color: Color):
         surface = self.font.render_solid(text, color)
         texture = self.renderer.create_texture_from_surface(surface)
         width, height = texture.query()
         self.renderer.copy(texture, Rect(x, y, width, height))
 
-    def handle_events(self) -> bool:
+    func handle_events(self) -> bool:
         running = True
 
         while True:
@@ -395,7 +395,7 @@ class Game:
 
         return running
 
-    def handle_key(self, key: KeyCode):
+    func handle_key(self, key: KeyCode):
         if key == KeyCode.Space:
             self.handle_key_space()
         elif key == self.key_fire:
@@ -415,13 +415,13 @@ class Game:
         elif key == KeyCode.Down:
             self.move_tetro_down()
 
-    def handle_key_space(self):
+    func handle_key_space(self):
         pass
 
-    def handle_key_fire(self):
+    func handle_key_fire(self):
         pass
 
-    def rotate_tetro(self, step: i64):
+    func rotate_tetro(self, step: i64):
         rotation_index = self.rotation_index
         self.rotation_index += step
         self.rotation_index %= TETRO_SIZE
@@ -429,13 +429,13 @@ class Game:
         if not self.move_tetro_side(0):
             self.rotation_index = rotation_index
 
-    def move_tetro_left(self):
+    func move_tetro_left(self):
         self.move_tetro_side(-1)
 
-    def move_tetro_right(self):
+    func move_tetro_right(self):
         self.move_tetro_side(1)
 
-    def move_tetro_side(self, dx: i64) -> bool:
+    func move_tetro_side(self, dx: i64) -> bool:
         # Reached left/right edge or another tetro?
         for block in self.tetro.blocks[self.rotation_index]:
             x = block.x + self.x_pos + dx
@@ -449,7 +449,7 @@ class Game:
 
         return True
 
-    def move_tetro_down(self):
+    func move_tetro_down(self):
         for block in self.tetro.blocks[self.rotation_index]:
             y = block.y + self.y_pos + 1
             x = block.x + self.x_pos
@@ -474,7 +474,7 @@ class Game:
 
         self.y_pos += 1
 
-    def new_tetro(self):
+    func new_tetro(self):
         self.x_pos = FIELD_WIDTH / 2 - TETRO_SIZE / 2
         self.y_pos = 2
         self.tetro = TETROS[self.next_tetro_index]
@@ -482,18 +482,18 @@ class Game:
         self.tetro_stats[self.next_tetro_index] += 1
         self.next_tetro_index = self.nes_random.random()
 
-    def drop_tetro(self):
+    func drop_tetro(self):
         for block in self.tetro.blocks[self.rotation_index]:
             x = block.x + self.x_pos
             y = block.y + self.y_pos
             row = self.field[y]
             row[x] = self.tetro.color_index + 1
 
-    def fill_rect(self, rect: Rect, color: Color):
+    func fill_rect(self, rect: Rect, color: Color):
         value = self.screen.map_rgb(color.r, color.g, color.b)
         self.screen.fill_rect(rect, value)
 
-    def delete_cleared_lines(self) -> bool:
+    func delete_cleared_lines(self) -> bool:
         number_of_cleared_lines = 0
 
         for y in range(2, FIELD_HEIGHT + 3):
@@ -502,7 +502,7 @@ class Game:
 
         return number_of_cleared_lines > 0
 
-    def delete_cleared_line(self, y: i64) -> bool:
+    func delete_cleared_line(self, y: i64) -> bool:
         for v in slice(self.field[y], 1, -1):
             if v == 0:
                 return False
@@ -514,7 +514,7 @@ class Game:
 
         return True
 
-def main():
+func main():
     sdl_init()
     ttf_init()
     img_init()
