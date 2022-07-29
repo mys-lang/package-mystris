@@ -1,9 +1,10 @@
 [package]
 name = "mystris"
-version = "1.4.0"
+version = "1.5.0"
 authors = ["Erik Moqvist <erik.moqvist@gmail.com>"]
 description = "A tetris clone."
 
 [dependencies]
 sdl = "latest"
 random = "latest"
+os = "latest"
